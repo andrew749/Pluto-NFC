@@ -1,6 +1,7 @@
 package me.andrewcodispoti.pluto_nfc;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -10,6 +11,6 @@ public class SendDataActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Intent i = getIntent();
     }
 }

@@ -11,7 +11,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 
 /**
@@ -20,9 +23,9 @@ import java.util.Arrays;
 public class SendDataActivity extends Activity {
     String TAG = "PLUTO";
     public static final String MIME_TEXT_PLAIN = "text/plain";
-
+    public static final String PLUTO_PATH = "127.0.0.1:3000/login";
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {/**/
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -113,6 +116,20 @@ public class SendDataActivity extends Activity {
 //                mTextView.setText("Read content: " + result);
                 //TODO HIT ENDPOINT
             }
+        }
+    }
+    private class LoginTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                URL url = new URL(PLUTO_PATH);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.connect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }

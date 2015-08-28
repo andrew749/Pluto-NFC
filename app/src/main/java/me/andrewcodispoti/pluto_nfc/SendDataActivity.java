@@ -114,7 +114,7 @@ public class SendDataActivity extends Activity {
         protected void onPostExecute(String result) {
             if (result != null) {
 //                mTextView.setText("Read content: " + result);
-                //TODO HIT ENDPOINT
+                    new LoginTask().execute();
             }
         }
     }

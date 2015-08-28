@@ -19,6 +19,7 @@ import java.util.Arrays;
  */
 public class SendDataActivity extends Activity {
     String TAG = "PLUTO";
+    public static final String MIME_TEXT_PLAIN = "text/plain";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

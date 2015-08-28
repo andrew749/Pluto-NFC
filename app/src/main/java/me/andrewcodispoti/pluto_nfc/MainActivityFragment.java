@@ -19,7 +19,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v=  inflater.inflate(R.layout.fragment_main, container, false);
-        ((TextView)v.findViewById(R.id.startButton)).setOnClickListener(this);
+        ((TextView)v.findViewById(R.id.createUser)).setOnClickListener(this);
         return v;
     }
 

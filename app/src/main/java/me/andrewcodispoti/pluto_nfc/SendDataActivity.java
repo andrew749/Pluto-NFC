@@ -10,6 +10,7 @@ import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -29,6 +30,7 @@ public class SendDataActivity extends Activity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String action = intent.getAction();
+        Toast.makeText(this,"Tag", Toast.LENGTH_LONG);
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
             String type = intent.getType();

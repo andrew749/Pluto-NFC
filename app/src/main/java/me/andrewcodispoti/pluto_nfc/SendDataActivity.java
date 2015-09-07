@@ -23,14 +23,12 @@ import java.util.Arrays;
  */
 public class SendDataActivity extends Activity {
     String TAG = "PLUTO";
-    public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String PLUTO_PATH = "192.168.0.15:3000/users/%s/io";
     @Override
     protected void onCreate(Bundle savedInstanceState) {/**/
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         String action = intent.getAction();
-        Toast.makeText(this,"Tag", Toast.LENGTH_LONG);
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tech Discovered Intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -53,6 +51,7 @@ public class SendDataActivity extends Activity {
             try {
                 URL url = new URL(String.format(PLUTO_PATH,  params[0]));
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setRequestMethod("POST");
                 conn.connect();
             } catch (IOException e) {
                 e.printStackTrace();

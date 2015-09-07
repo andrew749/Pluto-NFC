@@ -24,7 +24,7 @@ import java.util.Arrays;
 public class SendDataActivity extends Activity {
     String TAG = "PLUTO";
     public static final String MIME_TEXT_PLAIN = "text/plain";
-    public static final String PLUTO_PATH = "192.168.0.1:3000/login";
+    public static final String PLUTO_PATH = "192.168.0.15:3000/users/%s/io";
     @Override
     protected void onCreate(Bundle savedInstanceState) {/**/
         super.onCreate(savedInstanceState);
@@ -51,7 +51,7 @@ public class SendDataActivity extends Activity {
         @Override
         protected Void doInBackground(String... params) {
             try {
-                URL url = new URL(PLUTO_PATH + params[0]);
+                URL url = new URL(String.format(PLUTO_PATH,  params[0]));
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.connect();
             } catch (IOException e) {

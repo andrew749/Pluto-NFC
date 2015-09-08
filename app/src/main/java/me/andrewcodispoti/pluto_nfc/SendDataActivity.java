@@ -15,8 +15,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.client.HttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -64,27 +69,55 @@ public class SendDataActivity extends Activity {
                 conn.setRequestMethod("POST");
                 conn.connect();
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK){
-                    final MediaPlayer mediaPlayer =  new MediaPlayer();
-                    mediaPlayer.setDataSource(
-                            getApplicationContext(), Uri.parse("http://www.downloads.nl/cgi-bin/mp3get.cgi?id=866b6dfbdbec7439f71517bafbd92fa0&n=2"));
-                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mediaPlayer.start();
+                    JSONObject response = getInputStreamResponse(conn.getInputStream());
+
+                    if (response.getString("status").equals("OK")){
+                        if (response.getBoolean("in")){
+                            playSoundWithID(R.raw.signin);
+                        }else{
+                            playSoundWithID(R.raw.signout);
                         }
-                    });
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            finish();
-                        }
-                    });
-                    mediaPlayer.prepareAsync();
+                    }else{
+                        playSoundWithID(R.raw.error);
+                    }
+
+                }else{
+                    playSoundWithID(R.raw.error);
                 }
+                return null;
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            playSoundWithID(R.raw.error);
+            return null;
+        }
+        private JSONObject getInputStreamResponse(InputStream is){
+            try {
+                BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                StringBuilder responseStrBuilder = new StringBuilder();
+
+                String inputStr;
+                while ((inputStr = streamReader.readLine()) != null)
+                    responseStrBuilder.append(inputStr);
+                return new JSONObject(responseStrBuilder.toString());
+            }catch(IOException e){
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return null;
+        }
+        private void playSoundWithID(int ID){
+            MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), ID);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    finish();
+                }
+            });
         }
     }
 }

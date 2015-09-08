@@ -2,6 +2,8 @@ package me.andrewcodispoti.pluto_nfc;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -41,6 +43,7 @@ public class SendDataActivity extends Activity {
                 }
                 hexdump += x + ' ';
             }
+            hexdump.substring(0,hexdump.length()-2);
             new LoginTask().execute(hexdump.replace(" ", ":"));
         }
     }
@@ -53,6 +56,23 @@ public class SendDataActivity extends Activity {
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.connect();
+                if (conn.getResponseCode() == 200){
+                    final MediaPlayer mediaPlayer =  new MediaPlayer();
+                    mediaPlayer.setDataSource(getApplicationContext(), Uri.parse("http://www.downloads.nl/cgi-bin/mp3get.cgi?id=866b6dfbdbec7439f71517bafbd92fa0&n=2"));
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mediaPlayer.start();
+                        }
+                    });
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            finish();
+                        }
+                    });
+                    mediaPlayer.prepareAsync();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

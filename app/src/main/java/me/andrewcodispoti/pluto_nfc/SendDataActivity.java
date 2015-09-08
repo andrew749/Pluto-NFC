@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.apache.http.client.HttpClient;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -25,7 +27,7 @@ import java.util.Arrays;
  */
 public class SendDataActivity extends Activity {
     String TAG = "PLUTO";
-    public static final String PLUTO_PATH = "192.168.0.15:3000/users/%s/io";
+    public static final String PLUTO_PATH = "http://192.168.0.15:3000/users/%s/io";
     @Override
     protected void onCreate(Bundle savedInstanceState) {/**/
         super.onCreate(savedInstanceState);
@@ -43,8 +45,10 @@ public class SendDataActivity extends Activity {
                 }
                 hexdump += x + ' ';
             }
-            hexdump.substring(0,hexdump.length()-2);
-            new LoginTask().execute(hexdump.replace(" ", ":"));
+            hexdump = hexdump.substring(0,hexdump.length()-1);
+            hexdump = hexdump.replace(" ", ":");
+
+            new LoginTask().execute(hexdump);
         }
     }
     private class LoginTask extends AsyncTask<String, Void, Void>{
@@ -52,13 +56,17 @@ public class SendDataActivity extends Activity {
         @Override
         protected Void doInBackground(String... params) {
             try {
-                URL url = new URL(String.format(PLUTO_PATH,  params[0]));
+                URL url = new URL(String.format(PLUTO_PATH, params[0]));
+
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setReadTimeout(10000);
+                conn.setConnectTimeout(15000);
                 conn.setRequestMethod("POST");
                 conn.connect();
-                if (conn.getResponseCode() == 200){
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK){
                     final MediaPlayer mediaPlayer =  new MediaPlayer();
-                    mediaPlayer.setDataSource(getApplicationContext(), Uri.parse("http://www.downloads.nl/cgi-bin/mp3get.cgi?id=866b6dfbdbec7439f71517bafbd92fa0&n=2"));
+                    mediaPlayer.setDataSource(
+                            getApplicationContext(), Uri.parse("http://www.downloads.nl/cgi-bin/mp3get.cgi?id=866b6dfbdbec7439f71517bafbd92fa0&n=2"));
                     mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mp) {

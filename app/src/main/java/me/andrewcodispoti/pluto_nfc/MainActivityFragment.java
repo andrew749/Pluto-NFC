@@ -1,5 +1,6 @@
 package me.andrewcodispoti.pluto_nfc;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,8 +14,7 @@ import android.widget.TextView;
  */
 public class MainActivityFragment extends Fragment implements View.OnClickListener {
 
-    private TextView mUsername;
-    private Button mSubmitButton;
+    private Button mStartButton;
 
     public MainActivityFragment() {
     }
@@ -23,21 +23,15 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-        mSubmitButton = (Button)v.findViewById(R.id.createUser);
-        mSubmitButton.setOnClickListener(this);
-        mUsername = ((TextView)v.findViewById(R.id.createUser));
-        mUsername.setOnClickListener(this);
+        mStartButton = (Button)v.findViewById(R.id.startBlackMode);
+        mStartButton.setOnClickListener(this);
         return v;
     }
 
     @Override
     public void onClick(View v) {
-        if (v == mSubmitButton) {
-            registerNewUser();
+        if (v == mStartButton) {
+            getActivity().startService(new Intent(getActivity(), BlackModeService.class));
         }
-    }
-
-    private void registerNewUser() {
-
     }
 }

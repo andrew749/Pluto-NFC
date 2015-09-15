@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Pluto</string>
     <string name="startservice">Start Service</string>
-    <string name="createuser">Create User</string>
+    <string name="createuser">Black Mode</string>
+    <string name="title">Press the button</string>
 </resources>

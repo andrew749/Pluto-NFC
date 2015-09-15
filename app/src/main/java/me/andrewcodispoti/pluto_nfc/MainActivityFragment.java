@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -12,19 +13,31 @@ import android.widget.TextView;
  */
 public class MainActivityFragment extends Fragment implements View.OnClickListener {
 
+    private TextView mUsername;
+    private Button mSubmitButton;
+
     public MainActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v=  inflater.inflate(R.layout.fragment_main, container, false);
-        ((TextView)v.findViewById(R.id.createUser)).setOnClickListener(this);
+        View v = inflater.inflate(R.layout.fragment_main, container, false);
+        mSubmitButton = (Button)v.findViewById(R.id.createUser);
+        mSubmitButton.setOnClickListener(this);
+        mUsername = ((TextView)v.findViewById(R.id.createUser));
+        mUsername.setOnClickListener(this);
         return v;
     }
 
     @Override
     public void onClick(View v) {
+        if (v == mSubmitButton) {
+            registerNewUser();
+        }
+    }
+
+    private void registerNewUser() {
 
     }
 }
